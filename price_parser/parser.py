@@ -8,7 +8,6 @@ import attr
 from ._currencies import (CURRENCY_CODES, CURRENCY_NATIONAL_SYMBOLS,
                           CURRENCY_SYMBOLS)
 
-
 @attr.s(auto_attribs=True)
 class Price:
     amount: Optional[Decimal]   # price numeric value, as Decimal
@@ -51,14 +50,11 @@ class Price:
             amount_text=amount_text,
         )
 
-
 parse_price = Price.fromstring
-
 
 def or_regex(symbols: List[str]) -> Pattern:
     """ Return a regex which matches any of ``symbols`` """
     return re.compile('|'.join(re.escape(s) for s in symbols))
-
 
 # If one of these symbols is found either in price or in currency,
 # it is considered currency symbol, and returned as a currency, regardless
@@ -106,7 +102,6 @@ _DOLLAR_REGEX = re.compile(
     re.VERBOSE,
 )
 
-
 # Other common currency symbols: 3-letter codes, less safe abbreviations
 OTHER_CURRENCY_SYMBOLS_SET = (
     set(
@@ -127,7 +122,6 @@ OTHER_CURRENCY_SYMBOLS = sorted(OTHER_CURRENCY_SYMBOLS_SET,
 _search_dollar_code = _DOLLAR_REGEX.search
 _search_safe_currency = or_regex(SAFE_CURRENCY_SYMBOLS).search
 _search_unsafe_currency = or_regex(OTHER_CURRENCY_SYMBOLS).search
-
 
 def extract_currency_symbol(price: Optional[str],
                             currency_hint: Optional[str]) -> Optional[str]:
@@ -154,7 +148,6 @@ def extract_currency_symbol(price: Optional[str],
             return m.group(0)
 
     return None
-
 
 def extract_price_text(price: str) -> Optional[str]:
     """
@@ -210,7 +203,6 @@ def extract_price_text(price: str) -> Optional[str]:
         return '0'
     return None
 
-
 # NOTE: Keep supported separators in sync with parse_number()
 _search_decimal_sep = re.compile(r"""
 \d           # at least one digit (there can be more before it)
@@ -221,7 +213,6 @@ _search_decimal_sep = re.compile(r"""
 )
 $
 """, re.VERBOSE).search
-
 
 def get_decimal_separator(price: str) -> Optional[str]:
     """ Return decimal separator symbol or None if there
@@ -241,7 +232,6 @@ def get_decimal_separator(price: str) -> Optional[str]:
     m = _search_decimal_sep(price)
     if m:
         return m.group(1)
-
 
 def parse_number(num: str,
                  decimal_separator: Optional[str] = None) -> Optional[Decimal]:
